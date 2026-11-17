@@ -1,3 +1,10 @@
+# Optimized by ci-cost (https://github.com/mariotavarez/ci-cost)
+# Applied 3 optimizations:
+# - [HIGH] Add npm dependency cache to "build_and_deploy_job" job
+# - [HIGH] Add npm dependency cache to "close_pull_request_job" job
+# - [MEDIUM] Add concurrency group to "azure-static-web-apps-delightful-cliff-0acdaf71e.yml"
+# Estimated savings: ~10 min/run
+#
 name: Azure Static Web Apps CI/CD
 
 on:
@@ -10,6 +17,10 @@ on:
     branches:
       - main
 
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   build_and_deploy_job:
     if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
